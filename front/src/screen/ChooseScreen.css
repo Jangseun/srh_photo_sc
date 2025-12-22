@@ -25,14 +25,14 @@
 
 .frame-container {
   width: 75%;
-  height: 60%;
+  height: 40%;
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
 }
 
 .frame-container2 {
-  width: 160%;
+  width: 280%;
   height: 100%;
   display: flex;
   align-items: center;
