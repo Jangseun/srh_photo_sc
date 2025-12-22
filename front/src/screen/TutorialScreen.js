@@ -11,9 +11,9 @@ const TutorialScreen = ({ onComplete }) => {
         <img src={`${process.env.PUBLIC_URL}/example.png`} alt="example" />
     </div>
     <div className="no-center">
-    <ul><li>촬영 전 마음에 드는 프레임을 골라주세요.<br/><br/></li>
-        <li>5초에 한번씩 네번의 사진이 촬영됩니다.<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;시간에 맞추어 포즈를 취해보세요!<br/><br/></li>
-        <li>완성된 스팸네컷을 출력하거나 다운로드하여 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;간직하세요.</li>
+    <ul><li>촬영 전 마음에 드는 프레임을<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 골라주세요.<br/><br/></li>
+        <li>5초에 한번씩 네번의 사진이<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;촬영됩니다.시간에 맞추어 포즈를 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;취해보세요!<br/><br/></li>
+        <li>완성된 스팸네컷을 출력하거나 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;다운로드하여 간직하세요.</li>
     </ul>
     </div>
     </div>

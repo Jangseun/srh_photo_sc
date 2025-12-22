@@ -13,7 +13,7 @@ const StartScreen = ({ onStart }) => {
           <div className="right-container">
             <img src={`${process.env.PUBLIC_URL}/spamlogo2.png`} alt="Spam Logo Ver2" className="logo2" />
             <div className="text-group">
-              <h2 className="big">Self Photo Booth</h2><h4 className="smail">of SRH</h4>
+              <h2 className="big">Photo Booth</h2><h4 className="smail">of SRH</h4>
             </div>   
           </div>
       </div>
