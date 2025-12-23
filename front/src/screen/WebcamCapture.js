@@ -183,7 +183,7 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto }) => {
 
   return (
     <div className="webcam-container">
-      <img src={`${process.env.PUBLIC_URL}/camera-frame.png`} className="camera-frame" alt="카메라 프레임"/>
+      <img src={`${process.env.PUBLIC_URL}/camera-frame_3.png`} className="camera-frame" alt="카메라 프레임"/>
       {selectedDeviceId ? (
         <Webcam
           audio={false}                 // 오디오 캡처 비활성화
