@@ -47,7 +47,7 @@
 
 /* 컨트롤 패널의 배치 설정 */
 .controls {
-  margin-top: 60%;
+  margin-top: 53%;
   text-align: center; /* 텍스트와 아이콘 중앙 정렬 */
   position: absolute;
   z-index: 2;
