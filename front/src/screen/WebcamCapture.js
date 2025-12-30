@@ -23,32 +23,35 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto }) => {
   // 사용 가능한 비디오 장치를 감지하는 함수
   const getVideoDevices = useCallback(async () => {
     try {
-      // 1. 먼저 권한을 요청해서 장치 이름(label)을 볼 수 있게 만듭니다.
-      await navigator.mediaDevices.getUserMedia({ video: true });
+      // [핵심] 장치 목록을 읽기 전에 일단 아무 카메라나 스트림을 가져옵니다. 
+      // 이렇게 해야 브라우저가 하드웨어를 '활성화'하고 권한 팝업을 띄웁니다.
+      const tempStream = await navigator.mediaDevices.getUserMedia({ video: true });
       
+      // 스트림이 성공하면 즉시 목록을 가져옵니다.
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoInputs = devices.filter(device => device.kind === "videoinput");
-      setVideoDevices(videoInputs);
+      
+      console.log("전체 장치 목록:", videoInputs); // 여기서 태블릿이 웹캠을 보는지 로그 찍힘
+      
+      // 임시 스트림은 바로 꺼줍니다 (안 끄면 카메라 점유함)
+      tempStream.getTracks().forEach(track => track.stop());
 
-      // 2. 외부 웹캠 찾기 로직 강화
-      // 삼성 태블릿은 보통 내장 카메라가 0, 1번을 차지합니다.
-      // 'usb'라는 단어가 포함되거나, 이름이 있는 장치 중 마지막 것을 선택하는 게 유리합니다.
-      const externalWebcam = videoInputs.find(device => 
-        device.label.toLowerCase().includes("usb") || 
-        device.label.toLowerCase().includes("video") ||
-        (device.label !== "" && !device.label.toLowerCase().includes("front") && !device.label.toLowerCase().includes("back"))
+      // 외부 웹캠 찾기 (보통 'USB'나 'Camera'라는 단어가 포함됨)
+      // 혹은 내장(front/back)이 아닌 장치를 찾습니다.
+      const external = videoInputs.find(d => 
+        d.label.toLowerCase().includes("usb") || 
+        (!d.label.toLowerCase().includes("front") && !d.label.toLowerCase().includes("back") && d.label !== "")
       );
 
-      if (externalWebcam) {
-        console.log("외부 웹캠 확정:", externalWebcam.label);
-        setSelectedDeviceId(externalWebcam.deviceId);
-      } else if (videoInputs.length > 0) {
-        // 외부 웹캠을 못 찾았다면 마지막 장치를 선택 (보단 보통 외장이 뒤에 붙음)
-        const lastDevice = videoInputs[videoInputs.length - 1];
-        setSelectedDeviceId(lastDevice.deviceId);
+      if (external) {
+        setSelectedDeviceId(external.deviceId);
+      } else {
+        // 못 찾으면 마지막 장치를 일단 선택
+        setSelectedDeviceId(videoInputs[videoInputs.length - 1]?.deviceId);
       }
     } catch (error) {
-      console.error("장치 접근 권한 거부 또는 오류:", error);
+      console.error("카메라 접근 실패:", error);
+      alert("카메라 권한을 허용해 주세요!");
     }
   }, []);
 
