@@ -23,26 +23,32 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto }) => {
   // 사용 가능한 비디오 장치를 감지하는 함수
   const getVideoDevices = useCallback(async () => {
     try {
+      // 1. 먼저 권한을 요청해서 장치 이름(label)을 볼 수 있게 만듭니다.
+      await navigator.mediaDevices.getUserMedia({ video: true });
+      
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoInputs = devices.filter(device => device.kind === "videoinput");
       setVideoDevices(videoInputs);
-      
-      // HDMI 연결 웹캠 탐지 (일반적으로 외부 웹캠은 내장 웹캠 이후에 등록됨)
-      const externalWebcams = videoInputs.filter(device => 
-        !device.label.toLowerCase().includes("built") && 
-        !device.label.toLowerCase().includes("internal")
+
+      // 2. 외부 웹캠 찾기 로직 강화
+      // 삼성 태블릿은 보통 내장 카메라가 0, 1번을 차지합니다.
+      // 'usb'라는 단어가 포함되거나, 이름이 있는 장치 중 마지막 것을 선택하는 게 유리합니다.
+      const externalWebcam = videoInputs.find(device => 
+        device.label.toLowerCase().includes("usb") || 
+        device.label.toLowerCase().includes("video") ||
+        (device.label !== "" && !device.label.toLowerCase().includes("front") && !device.label.toLowerCase().includes("back"))
       );
-      
-      // 외부 웹캠이 있으면 첫 번째 외부 웹캠을 선택, 없으면 내장 웹캠 선택
-      if (externalWebcams.length > 0) {
-        console.log("외부 웹캠 감지됨:", externalWebcams[0].label);
-        setSelectedDeviceId(externalWebcams[0].deviceId);
+
+      if (externalWebcam) {
+        console.log("외부 웹캠 확정:", externalWebcam.label);
+        setSelectedDeviceId(externalWebcam.deviceId);
       } else if (videoInputs.length > 0) {
-        console.log("내장 웹캠 사용:", videoInputs[0].label);
-        setSelectedDeviceId(videoInputs[0].deviceId);
+        // 외부 웹캠을 못 찾았다면 마지막 장치를 선택 (보단 보통 외장이 뒤에 붙음)
+        const lastDevice = videoInputs[videoInputs.length - 1];
+        setSelectedDeviceId(lastDevice.deviceId);
       }
     } catch (error) {
-      console.error("비디오 장치 감지 오류:", error);
+      console.error("장치 접근 권한 거부 또는 오류:", error);
     }
   }, []);
 
