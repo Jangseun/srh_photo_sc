@@ -30,6 +30,7 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto }) => {
       // 스트림이 성공하면 즉시 목록을 가져옵니다.
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoInputs = devices.filter(device => device.kind === "videoinput");
+      alert("찾은 카메라 개수: " + videoInputs.length + "\n목록: " + videoInputs.map(d => d.label).join(", "));
       
       console.log("전체 장치 목록:", videoInputs); // 여기서 태블릿이 웹캠을 보는지 로그 찍힘
       
