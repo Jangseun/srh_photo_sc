@@ -25,7 +25,7 @@
 .webcam {
   width: 100%; /* 웹캠의 너비 조정 */
   height: 90%; /* 웹캠의 높이 조정 */
-  transform: scaleX(-1);
+  transform: scaleX(-1) rotate(0deg);
   object-fit: contain; /* 비율 유지하며 컨테이너에 맞춤 */
   margin-bottom: 16%;
   z-index: 1;
